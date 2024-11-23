@@ -43,7 +43,7 @@ public class WiadomoscController {
         return new ResponseEntity<>(rsp, HttpStatus.OK);
     }
 
-    @GetMapping
+    @PostMapping("/rozmowa")
     public ResponseEntity<List<WiadomoscRsp>> getConversation(
             @RequestBody WiadomosciGetReq req) {
         return new ResponseEntity<>(mapWiadomosciToMultimedia(wiadomoscService.getConversation(req.getUser1(), req.getUser2()), multimediumService.findAll()), HttpStatus.OK);
