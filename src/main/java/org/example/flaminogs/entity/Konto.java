@@ -12,7 +12,7 @@ public class Konto {
     @Column(name = "login", nullable = false, length = 30)
     private String login;
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, length = 128)
     private String password;
 
     @Column(nullable = false, length = 60)

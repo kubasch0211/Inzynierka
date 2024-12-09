@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +26,7 @@ public class KontoController {
 
     @PostMapping
     public ResponseEntity<Konto> createKonto(@RequestBody final Konto konto) {
+        konto.setPassword(BCrypt.hashpw(konto.getPassword(), BCrypt.gensalt()));
         Konto savedKonto = kontoService.save(konto);
         return new ResponseEntity<>(savedKonto, HttpStatus.CREATED);
     }
