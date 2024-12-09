@@ -4,6 +4,7 @@ import org.example.flaminogs.entity.Konto;
 import org.example.flaminogs.klasy.Member;
 import org.example.flaminogs.requesty.LoginReq;
 import org.example.flaminogs.requesty.SetAdminReq;
+import org.example.flaminogs.security.JwtUtils;
 import org.example.flaminogs.service.KontoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,9 @@ public class KontoController {
         this.kontoService = kontoService;
     }
 
+    @Autowired
+    private JwtUtils jwtUtils;
+
     @PostMapping
     public ResponseEntity<Konto> createKonto(@RequestBody final Konto konto) {
         konto.setPassword(BCrypt.hashpw(konto.getPassword(), BCrypt.gensalt()));
@@ -33,9 +37,9 @@ public class KontoController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginReq loginRequest) {
-        final Konto authenticatedKonto = kontoService.authenticate(loginRequest.getLogin(), loginRequest.getPassword());
+        final String authenticatedKonto = kontoService.authenticate(loginRequest.getLogin(), loginRequest.getPassword());
         if (authenticatedKonto != null) {
-            return new ResponseEntity<>(authenticatedKonto.getLogin(), HttpStatus.OK);
+            return new ResponseEntity<>(authenticatedKonto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Invalid credentials", HttpStatus.UNAUTHORIZED);
         }
