@@ -37,15 +37,15 @@ public class KontoController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginReq loginRequest) {
-        final String authenticatedKonto = kontoService.authenticate(loginRequest.getLogin(), loginRequest.getPassword());
-        if (authenticatedKonto != null) {
-            return new ResponseEntity<>(authenticatedKonto, HttpStatus.OK);
+        final String token = kontoService.authenticate(loginRequest.getLogin(), loginRequest.getPassword());
+        if (token != null) {
+            return new ResponseEntity<>(token, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Invalid credentials", HttpStatus.UNAUTHORIZED);
         }
     }
 
-    @GetMapping("/isAdmin")
+    @PostMapping("/isAdmin")
     public ResponseEntity<Boolean> getIsAdmin(@RequestBody final String token) {
         return new ResponseEntity<>(isAdmin(token), HttpStatus.OK);
     }
@@ -68,13 +68,14 @@ public class KontoController {
     }
 
     private boolean isAdmin(final String token) {
-        return kontoService.findById(token).isIsadmin();
+            return kontoService.findById(jwtUtils.getUsernameFromToken(token)).isIsadmin();
     }
 
 
     public static List<Member> convert(List<Konto> konta) {
         return konta.stream()
                 .map(konto -> new Member()
+                        .isadmin(konto.isIsadmin())
                         .login(konto.getLogin())
                         .name(konto.getName()))
                 .collect(Collectors.toList());

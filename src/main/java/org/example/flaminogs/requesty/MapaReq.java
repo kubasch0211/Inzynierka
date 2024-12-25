@@ -1,7 +1,7 @@
 package org.example.flaminogs.requesty;
 
 public class MapaReq {
-    private String login;
+    private String token;
     private float latitude;
     private float longitude;
     private String status;
@@ -9,30 +9,30 @@ public class MapaReq {
     public MapaReq() {
     }
 
-    public MapaReq(final String login, final Float latitude, final Float longitude, final String status) {
-        this.login=login;
+    public MapaReq(final String token, final Float latitude, final Float longitude, final String status) {
+        this.token = token;
         this.latitude=latitude;
         this.longitude=longitude;
         this.status=status;
     }
 
-    public MapaReq(final String login, final String status) {
-        this.login=login;
+    public MapaReq(final String token, final String status) {
+        this.token = token;
         this.status=status;
     }
 
-    public MapaReq(final String login, final Float latitude, final Float longitude) {
-        this.login=login;
+    public MapaReq(final String token, final Float latitude, final Float longitude) {
+        this.token = token;
         this.latitude=latitude;
         this.longitude=longitude;
     }
 
-    public String getLogin() {
-        return login;
+    public String getToken() {
+        return token;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public Float getLatitude() {

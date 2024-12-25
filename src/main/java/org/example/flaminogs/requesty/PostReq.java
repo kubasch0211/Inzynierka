@@ -3,16 +3,16 @@ package org.example.flaminogs.requesty;
 import java.util.List;
 
 public class PostReq {
-    private String login;
+    private String token;
     private String text;
     private List<String> multimedia;
 
-    public String getLogin() {
-        return login;
+    public String getToken() {
+        return token;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getText() {

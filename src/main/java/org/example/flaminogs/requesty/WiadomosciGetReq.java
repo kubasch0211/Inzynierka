@@ -1,15 +1,15 @@
 package org.example.flaminogs.requesty;
 
 public class WiadomosciGetReq {
-    String user1;
+    String token;
     String user2;
 
-    public String getUser1() {
-        return user1;
+    public String getToken() {
+        return token;
     }
 
-    public void setUser1(String user1) {
-        this.user1 = user1;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getUser2() {

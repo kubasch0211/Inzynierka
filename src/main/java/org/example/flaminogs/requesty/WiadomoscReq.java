@@ -3,17 +3,17 @@ package org.example.flaminogs.requesty;
 import java.util.List;
 
 public class WiadomoscReq {
-    private String loginsender;
+    private String token;
     private String loginreceiver;
     private String text;
     private List<String> multimedia;
 
-    public String getLoginsender() {
-        return loginsender;
+    public String getToken() {
+        return token;
     }
 
-    public void setLoginsender(String loginsender) {
-        this.loginsender = loginsender;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public List<String> getMultimedia() {
@@ -47,7 +47,7 @@ public class WiadomoscReq {
     }
 
     public WiadomoscReq loginsender(String loginsender) {
-        this.loginsender = loginsender;
+        this.token = loginsender;
         return this;
     }
 

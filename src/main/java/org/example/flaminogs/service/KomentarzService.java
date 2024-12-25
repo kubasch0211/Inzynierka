@@ -31,6 +31,10 @@ public class KomentarzService {
         return komentarzRepository.save(komentarz);
     }
 
+    public void delete(Integer id){
+        komentarzRepository.delete(komentarzRepository.findById(id).get());
+    }
+
     public void printAllKomentarze() {
         List<Komentarz> komentarze = findAll();
         for (Komentarz komentarz : komentarze) {

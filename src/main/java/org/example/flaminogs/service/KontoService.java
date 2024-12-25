@@ -38,7 +38,7 @@ public class KontoService {
     public Konto findById(String id) {
         return kontoRepository.getReferenceById(id);
     }
-    public String authenticate(String login, String password) {
+    public String  authenticate(String login, String password) {
         List<Konto> konta = findAll();
         for (Konto konto : konta) {
             if (konto.getLogin().equals(login) && BCrypt.checkpw(password, konto.getPassword())) {

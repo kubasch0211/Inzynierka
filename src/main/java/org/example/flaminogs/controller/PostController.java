@@ -5,9 +5,11 @@ import org.example.flaminogs.entity.Post;
 import org.example.flaminogs.klasy.KomentarzRsp;
 import org.example.flaminogs.klasy.PostRsp;
 import org.example.flaminogs.requesty.PostReq;
+import org.example.flaminogs.security.JwtUtils;
 import org.example.flaminogs.service.KomentarzService;
 import org.example.flaminogs.service.MultimediumService;
 import org.example.flaminogs.service.PostService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +26,9 @@ public class PostController {
     private final MultimediumService multimediumService;
     private final KomentarzService komentarzService;
 
+    @Autowired
+    private JwtUtils jwtUtils;
+
     public PostController(PostService postService, MultimediumService multimediumService, KomentarzService komentarzService) {
         this.postService = postService;
         this.multimediumService = multimediumService;
@@ -37,7 +42,7 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<PostRsp> doPost(@RequestBody PostReq req) {
-        Post post = postService.save(new Post(req.getLogin(), req.getText(), LocalDateTime.now()));
+        Post post = postService.save(new Post(jwtUtils.getUsernameFromToken(req.getToken()), req.getText(), LocalDateTime.now()));
         PostRsp postRsp = new PostRsp(post, req.getMultimedia(), null);
         for (String multimedium : req.getMultimedia()) {
             multimediumService.save(new Multimedium(post.getId(), null, null, multimedium));
