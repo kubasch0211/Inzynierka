@@ -32,7 +32,7 @@ public class KomentarzService {
     }
 
     public void delete(Integer id){
-        komentarzRepository.delete(komentarzRepository.findById(id).get());
+        komentarzRepository.deleteById(id);
     }
 
     public void printAllKomentarze() {

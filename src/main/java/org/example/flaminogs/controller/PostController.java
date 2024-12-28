@@ -4,9 +4,11 @@ import org.example.flaminogs.entity.Multimedium;
 import org.example.flaminogs.entity.Post;
 import org.example.flaminogs.klasy.KomentarzRsp;
 import org.example.flaminogs.klasy.PostRsp;
+import org.example.flaminogs.requesty.DeletePostReq;
 import org.example.flaminogs.requesty.PostReq;
 import org.example.flaminogs.security.JwtUtils;
 import org.example.flaminogs.service.KomentarzService;
+import org.example.flaminogs.service.KontoService;
 import org.example.flaminogs.service.MultimediumService;
 import org.example.flaminogs.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +27,16 @@ public class PostController {
     private final PostService postService;
     private final MultimediumService multimediumService;
     private final KomentarzService komentarzService;
+    private final KontoService kontoService;
 
     @Autowired
     private JwtUtils jwtUtils;
 
-    public PostController(PostService postService, MultimediumService multimediumService, KomentarzService komentarzService) {
+    public PostController(PostService postService, MultimediumService multimediumService, KomentarzService komentarzService, KontoService kontoService) {
         this.postService = postService;
         this.multimediumService = multimediumService;
         this.komentarzService = komentarzService;
+        this.kontoService = kontoService;
     }
 
     @GetMapping
@@ -77,6 +81,18 @@ public class PostController {
         }
 
         return result;
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deletePost(@RequestBody DeletePostReq req) {
+        if (isAdmin(req.getToken())) {
+            postService.delete(req.getPostId());
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    private boolean isAdmin(final String token) {
+        return kontoService.findById(jwtUtils.getUsernameFromToken(token)).isIsadmin();
     }
 
 }
