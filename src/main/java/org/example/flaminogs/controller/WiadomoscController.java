@@ -1,5 +1,6 @@
 package org.example.flaminogs.controller;
 
+import jakarta.validation.Valid;
 import org.example.flaminogs.entity.Multimedium;
 import org.example.flaminogs.entity.Wiadomosc;
 import org.example.flaminogs.klasy.WiadomoscRsp;
@@ -11,7 +12,10 @@ import org.example.flaminogs.service.WiadomoscService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -33,7 +37,7 @@ public class WiadomoscController {
     }
 
     @PostMapping
-    public ResponseEntity<WiadomoscRsp> doWiadomosc(@RequestBody WiadomoscReq req) {
+    public ResponseEntity<WiadomoscRsp> doWiadomosc(@Valid @RequestBody WiadomoscReq req) {
         final Wiadomosc wiadomosc = wiadomoscService.save(new Wiadomosc()
                 .loginsender(jwtUtils.getLoginFromToken(req.getToken()))
                 .text(req.getText())
@@ -50,7 +54,7 @@ public class WiadomoscController {
 
     @PostMapping("/rozmowa")
     public ResponseEntity<List<WiadomoscRsp>> getConversation(
-            @RequestBody WiadomosciGetReq req) {
+            @Valid @RequestBody WiadomosciGetReq req) {
         return new ResponseEntity<>(mapWiadomosciToMultimedia(wiadomoscService.getConversation(jwtUtils.getLoginFromToken(req.getToken()), req.getUser2()), multimediumService.findAll()), HttpStatus.OK);
 
     }

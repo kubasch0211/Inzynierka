@@ -1,5 +1,6 @@
 package org.example.flaminogs.controller;
 
+import jakarta.validation.Valid;
 import org.example.flaminogs.entity.Multimedium;
 import org.example.flaminogs.entity.Post;
 import org.example.flaminogs.klasy.KomentarzRsp;
@@ -45,7 +46,7 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<PostRsp> doPost(@RequestBody PostReq req) {
+    public ResponseEntity<PostRsp> doPost(@Valid @RequestBody PostReq req) {
         Post post = postService.save(new Post(jwtUtils.getLoginFromToken(req.getToken()), req.getText(), LocalDateTime.now()));
         PostRsp postRsp = new PostRsp(post, req.getMultimedia(), null);
         for (String multimedium : req.getMultimedia()) {
@@ -84,7 +85,7 @@ public class PostController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deletePost(@RequestBody DeletePostReq req) {
+    public ResponseEntity<Void> deletePost(@Valid @RequestBody DeletePostReq req) {
         if (isAdmin(req.getToken())) {
             postService.delete(req.getPostId());
         }

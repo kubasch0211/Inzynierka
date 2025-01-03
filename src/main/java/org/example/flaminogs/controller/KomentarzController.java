@@ -1,5 +1,6 @@
 package org.example.flaminogs.controller;
 
+import jakarta.validation.Valid;
 import org.example.flaminogs.entity.Komentarz;
 import org.example.flaminogs.entity.Multimedium;
 import org.example.flaminogs.klasy.KomentarzRsp;
@@ -33,7 +34,7 @@ public class KomentarzController {
     }
 
     @PostMapping
-    public ResponseEntity<KomentarzRsp> doKomentarz(@RequestBody CommentReq req){
+    public ResponseEntity<KomentarzRsp> doKomentarz(@Valid @RequestBody CommentReq req){
         Komentarz komentarz=komentarzService.save(new Komentarz(jwtUtils.getLoginFromToken(req.getToken()),req.getText(),req.getPostId(), LocalDateTime.now()));
         KomentarzRsp komentarzRsp=new KomentarzRsp(komentarz,req.getMultimedia());
         for (String multimedium : req.getMultimedia()){
@@ -43,7 +44,7 @@ public class KomentarzController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteKomentarz(@RequestBody DeleteCommentReq req){
+    public ResponseEntity<Void> deleteKomentarz(@Valid @RequestBody DeleteCommentReq req){
         if(isAdmin(req.getToken())){
             komentarzService.delete(req.getCommentId());
         }

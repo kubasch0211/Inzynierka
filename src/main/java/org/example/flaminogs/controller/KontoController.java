@@ -1,16 +1,18 @@
 package org.example.flaminogs.controller;
 
+import jakarta.validation.Valid;
 import org.example.flaminogs.entity.Konto;
 import org.example.flaminogs.klasy.Member;
+import org.example.flaminogs.requesty.KontoReq;
 import org.example.flaminogs.requesty.LoginReq;
 import org.example.flaminogs.requesty.SetAdminReq;
 import org.example.flaminogs.security.JwtUtils;
 import org.example.flaminogs.service.KontoService;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,14 +31,18 @@ public class KontoController {
     private JwtUtils jwtUtils;
 
     @PostMapping
-    public ResponseEntity<Konto> createKonto(@RequestBody final Konto konto) {
-        konto.setPassword(BCrypt.hashpw(konto.getPassword(), BCrypt.gensalt()));
+    public ResponseEntity<Konto> createKonto(@Valid @RequestBody final KontoReq req) {
+        Konto konto = new Konto();
+        konto.setLogin(req.getLogin());
+        konto.setPassword(BCrypt.hashpw(req.getPassword(), BCrypt.gensalt()));
+        konto.setName(req.getName());
+        konto.setIsadmin(false);
         Konto savedKonto = kontoService.save(konto);
         return new ResponseEntity<>(savedKonto, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginReq loginRequest) {
+    public ResponseEntity<String> login(@Valid @RequestBody LoginReq loginRequest) {
         final String token = kontoService.authenticate(loginRequest.getLogin(), loginRequest.getPassword());
         if (token != null) {
             return new ResponseEntity<>(token, HttpStatus.OK);
@@ -46,14 +52,14 @@ public class KontoController {
     }
 
     @PostMapping("/isAdmin")
-    public ResponseEntity<Boolean> getIsAdmin(@RequestBody final String token) {
+    public ResponseEntity<Boolean> getIsAdmin(@Valid @RequestBody final String token) {
         return new ResponseEntity<>(isAdmin(token), HttpStatus.OK);
     }
 
     @PutMapping("/setAdmin")
-    public ResponseEntity<Boolean> setAdmin(@RequestBody final SetAdminReq setAdminReq) {
+    public ResponseEntity<Boolean> setAdmin(@Valid @RequestBody final SetAdminReq setAdminReq) {
         boolean isAdminDone = false;
-        if(isAdmin(setAdminReq.getToken())){
+        if (isAdmin(setAdminReq.getToken())) {
             Konto konto = kontoService.findById(setAdminReq.getLogin());
             konto.setIsadmin(true);
             kontoService.save(konto);
@@ -68,7 +74,7 @@ public class KontoController {
     }
 
     private boolean isAdmin(final String token) {
-            return kontoService.findById(jwtUtils.getLoginFromToken(token)).isIsadmin();
+        return kontoService.findById(jwtUtils.getLoginFromToken(token)).isIsadmin();
     }
 
 

@@ -35,13 +35,6 @@ public class KomentarzService {
         komentarzRepository.deleteById(id);
     }
 
-    public void printAllKomentarze() {
-        List<Komentarz> komentarze = findAll();
-        for (Komentarz komentarz : komentarze) {
-            System.out.println("Komentarz ID: " + komentarz.getId() + ", Treść: " + komentarz.getText());
-        }
-    }
-
     public List<KomentarzRsp> getAllKomentarze() {
         List<KomentarzRsp> result = new ArrayList<>();
 

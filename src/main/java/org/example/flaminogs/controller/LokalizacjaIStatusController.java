@@ -1,5 +1,6 @@
 package org.example.flaminogs.controller;
 
+import jakarta.validation.Valid;
 import org.example.flaminogs.entity.LokalizacjaIStatus;
 import org.example.flaminogs.klasy.MapaRsp;
 import org.example.flaminogs.requesty.MapaReq;
@@ -41,7 +42,7 @@ public class LokalizacjaIStatusController {
     }
 
     @PutMapping
-    public ResponseEntity<LokalizacjaIStatus> setLocationAndStatus(@RequestBody MapaReq mapaReq) {
+    public ResponseEntity<LokalizacjaIStatus> setLocationAndStatus(@Valid @RequestBody MapaReq mapaReq) {
         LokalizacjaIStatus lokalizacjaIStatus = lokalizacjaIStatusService.getById(jwtUtils.getLoginFromToken(mapaReq.getToken()));
 
         if (mapaReq.getStatus() != null) {
