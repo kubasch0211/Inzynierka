@@ -46,7 +46,7 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<PostRsp> doPost(@RequestBody PostReq req) {
-        Post post = postService.save(new Post(jwtUtils.getUsernameFromToken(req.getToken()), req.getText(), LocalDateTime.now()));
+        Post post = postService.save(new Post(jwtUtils.getLoginFromToken(req.getToken()), req.getText(), LocalDateTime.now()));
         PostRsp postRsp = new PostRsp(post, req.getMultimedia(), null);
         for (String multimedium : req.getMultimedia()) {
             multimediumService.save(new Multimedium(post.getId(), null, null, multimedium));
@@ -92,7 +92,7 @@ public class PostController {
     }
 
     private boolean isAdmin(final String token) {
-        return kontoService.findById(jwtUtils.getUsernameFromToken(token)).isIsadmin();
+        return kontoService.findById(jwtUtils.getLoginFromToken(token)).isIsadmin();
     }
 
 }

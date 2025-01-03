@@ -38,7 +38,7 @@ public class KontoService {
     public Konto findById(String id) {
         return kontoRepository.getReferenceById(id);
     }
-    public String  authenticate(String login, String password) {
+    public String authenticate(String login, String password) {
         List<Konto> konta = findAll();
         for (Konto konto : konta) {
             if (konto.getLogin().equals(login) && BCrypt.checkpw(password, konto.getPassword())) {
@@ -47,7 +47,7 @@ public class KontoService {
                 UserToken userToken = new UserToken();
                 userToken.setKonto(konto);
                 userToken.setToken(token);
-                userToken.setExpirationDate(new Date(System.currentTimeMillis() + jwtUtils.getExpiration())); // Ustawienie daty wygaśnięcia tokena
+                userToken.setExpirationDate(jwtUtils.getExpiration(token));
                 userTokenRepository.save(userToken);
 
                 return token;

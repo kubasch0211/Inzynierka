@@ -13,16 +13,16 @@ public class JwtUtils {
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private final long expiration = 3600000;
 
-    public String generateToken(String username) {
+    public String generateToken(String login) {
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(login)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(key)
                 .compact();
     }
 
-    public String getUsernameFromToken(String token) {
+    public String getLoginFromToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
@@ -31,7 +31,12 @@ public class JwtUtils {
                 .getSubject();
     }
 
-    public long getExpiration() {
-        return expiration;
+    public Date getExpiration(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getExpiration();
     }
 }

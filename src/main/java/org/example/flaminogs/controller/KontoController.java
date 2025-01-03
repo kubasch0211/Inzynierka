@@ -68,7 +68,7 @@ public class KontoController {
     }
 
     private boolean isAdmin(final String token) {
-            return kontoService.findById(jwtUtils.getUsernameFromToken(token)).isIsadmin();
+            return kontoService.findById(jwtUtils.getLoginFromToken(token)).isIsadmin();
     }
 
 

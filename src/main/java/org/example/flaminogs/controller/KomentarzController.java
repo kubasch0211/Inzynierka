@@ -34,7 +34,7 @@ public class KomentarzController {
 
     @PostMapping
     public ResponseEntity<KomentarzRsp> doKomentarz(@RequestBody CommentReq req){
-        Komentarz komentarz=komentarzService.save(new Komentarz(jwtUtils.getUsernameFromToken(req.getToken()),req.getText(),req.getPostId(), LocalDateTime.now()));
+        Komentarz komentarz=komentarzService.save(new Komentarz(jwtUtils.getLoginFromToken(req.getToken()),req.getText(),req.getPostId(), LocalDateTime.now()));
         KomentarzRsp komentarzRsp=new KomentarzRsp(komentarz,req.getMultimedia());
         for (String multimedium : req.getMultimedia()){
             multimediumService.save(new Multimedium(null, komentarz.getId(), null,multimedium));
@@ -51,6 +51,6 @@ public class KomentarzController {
     }
 
     private boolean isAdmin(final String token) {
-        return kontoService.findById(jwtUtils.getUsernameFromToken(token)).isIsadmin();
+        return kontoService.findById(jwtUtils.getLoginFromToken(token)).isIsadmin();
     }
 }

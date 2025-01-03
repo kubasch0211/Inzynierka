@@ -35,7 +35,7 @@ public class WiadomoscController {
     @PostMapping
     public ResponseEntity<WiadomoscRsp> doWiadomosc(@RequestBody WiadomoscReq req) {
         final Wiadomosc wiadomosc = wiadomoscService.save(new Wiadomosc()
-                .loginsender(jwtUtils.getUsernameFromToken(req.getToken()))
+                .loginsender(jwtUtils.getLoginFromToken(req.getToken()))
                 .text(req.getText())
                 .date(LocalDateTime.now())
                 .loginreceiver(req.getLoginreceiver()));
@@ -51,7 +51,7 @@ public class WiadomoscController {
     @PostMapping("/rozmowa")
     public ResponseEntity<List<WiadomoscRsp>> getConversation(
             @RequestBody WiadomosciGetReq req) {
-        return new ResponseEntity<>(mapWiadomosciToMultimedia(wiadomoscService.getConversation(jwtUtils.getUsernameFromToken(req.getToken()), req.getUser2()), multimediumService.findAll()), HttpStatus.OK);
+        return new ResponseEntity<>(mapWiadomosciToMultimedia(wiadomoscService.getConversation(jwtUtils.getLoginFromToken(req.getToken()), req.getUser2()), multimediumService.findAll()), HttpStatus.OK);
 
     }
 

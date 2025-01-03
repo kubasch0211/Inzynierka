@@ -42,7 +42,7 @@ public class LokalizacjaIStatusController {
 
     @PutMapping
     public ResponseEntity<LokalizacjaIStatus> setLocationAndStatus(@RequestBody MapaReq mapaReq) {
-        LokalizacjaIStatus lokalizacjaIStatus = lokalizacjaIStatusService.getById(jwtUtils.getUsernameFromToken(mapaReq.getToken()));
+        LokalizacjaIStatus lokalizacjaIStatus = lokalizacjaIStatusService.getById(jwtUtils.getLoginFromToken(mapaReq.getToken()));
 
         if (mapaReq.getStatus() != null) {
             lokalizacjaIStatus.setDatestatus(LocalDateTime.now());
